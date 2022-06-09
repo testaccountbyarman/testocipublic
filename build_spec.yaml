@@ -1,19 +1,10 @@
-version: 0.2
+version: 0.1
+component: build
+timeoutInSeconds: 1000
+shell: bash
 
-phases:
-  install:
-    runtime-versions:
-      java: corretto8
-  build:
-    commands:
-      - echo Build started on `date`
-      - mvn test
-  post_build:
-    commands:
-      - echo Build completed on `date`
-      - mvn package
-artifacts:
-  files:
-    - target/my-app-1.0-SNAPSHOT.jar
-    - appspec.yml
-  discard-paths: yes
+steps:
+  - type: Command
+    name: "Install Maven"
+    command: |
+      mvn clean install

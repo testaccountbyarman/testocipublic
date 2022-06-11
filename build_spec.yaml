@@ -1,10 +1,53 @@
 version: 0.1
 component: build
-timeoutInSeconds: 1000
+timeoutInSeconds: 1800
+runAs: root
 shell: bash
+env:
+  # these are local variables to the build config
+  variables:
+    key: "value"
+  # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
+  # you can then access the value of that secret in your build_spec.yaml commands
+  vaultVariables:
+
+  # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
+  # For this Build to run, the Build Pipeline needs to have a BUILDRUN_HASH parameter set
+  exportedVariables:
+    - BUILDRUN_HASH
+
 
 steps:
   - type: Command
-    name: "Install Maven"
+      name: "Install Maven"
+      command: |
+        mvn clean install
+
+  - type: Command
+      name: "Install Maven"
+      command: |
+        mvn test
+
+  - type: Command
+    timeoutInSeconds: 1200
+    name: "Build container image"
     command: |
-      mvn clean install
+      echo "========="
+      pwd
+      ls
+      docker build --pull --rm -t armanavasthi/others:testocipublic-0.0.1 -f DOCKERFILE .
+    onFailure:
+      - type: Command
+        command: |
+          echo "Handling Failure"
+          echo "Failure successfully handled"
+        timeoutInSeconds: 40
+        runAs: root
+
+
+outputArtifacts:
+  - name: output01
+    type: DOCKER_IMAGE
+    # this location tag doesn't effect the tag used to deliver the container image
+    # to the Container Registry
+    location: armanavasthi/others:testocipublic-0.0.1

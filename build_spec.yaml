@@ -24,7 +24,7 @@ steps:
       mvn clean install
 
   - type: Command
-    name: "Install Maven"
+    name: "Maven Test"
     command: |
       mvn test
 
@@ -35,7 +35,7 @@ steps:
       echo "========="
       pwd
       ls
-      docker build --pull --rm -t armanavasthi/others:testocipublic-0.0.1 -f DOCKERFILE .
+      docker build --pull --rm -t armanavasthi/others:testocipublic-0.0.1 -f Dockerfile .
     onFailure:
       - type: Command
         command: |

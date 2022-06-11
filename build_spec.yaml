@@ -35,7 +35,7 @@ steps:
       echo "========="
       pwd
       ls
-      docker build --pull --rm -t armanavasthi/others:testocipublic-0.0.1 -f Dockerfile .
+      docker build --pull --rm -t testocipublic -f Dockerfile .
     onFailure:
       - type: Command
         command: |

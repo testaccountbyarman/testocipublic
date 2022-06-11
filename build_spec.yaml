@@ -19,14 +19,14 @@ env:
 
 steps:
   - type: Command
-      name: "Install Maven"
-      command: |
-        mvn clean install
+    name: "Install Maven"
+    command: |
+      mvn clean install
 
   - type: Command
-      name: "Install Maven"
-      command: |
-        mvn test
+    name: "Install Maven"
+    command: |
+      mvn test
 
   - type: Command
     timeoutInSeconds: 1200

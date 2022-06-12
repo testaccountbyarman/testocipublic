@@ -1,0 +1,45 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: ${namespace}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: testocipublic-deployment
+  namespace: ${namespace}
+spec:
+  selector:
+    matchLabels:
+      app: testocipublic
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: testocipublic
+    spec:
+      containers:
+        - name: oci-devops-node-express
+          # enter the path to your image, be sure to include the correct region prefix
+          image: iad.ocir.io/ax022wvgmjpq/testocipublic
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: testocipublic-service
+  namespace: ${namespace}
+  annotations:
+    service.beta.kubernetes.io/oci-load-balancer-shape: "10Mbps"
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: devops-node

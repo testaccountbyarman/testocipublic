@@ -24,7 +24,7 @@ spec:
           image: iad.ocir.io/ax022wvgmjpq/testocipublic
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - containerPort: 6060
               protocol: TCP
       restartPolicy: Always
 ---
@@ -38,8 +38,8 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: 8080
+    - port: 80
       protocol: TCP
-      targetPort: 8080
+      targetPort: 6060
   selector:
     app: devops-node
